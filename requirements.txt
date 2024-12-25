@@ -1,0 +1,17 @@
+# Core libraries
+pandas
+numpy
+
+# PDF extraction
+pdfplumber
+
+# Machine learning
+scikit-learn
+joblib
+
+# Deployment
+flask
+
+# Visualization (optional, for EDA)
+matplotlib
+seaborn
