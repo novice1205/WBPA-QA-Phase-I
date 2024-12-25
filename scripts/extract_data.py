@@ -3,8 +3,8 @@ import pandas as pd
 import pdfplumber
 
 # Define directories
-RAW_DATA_DIR = "./data/raw/"
-PROCESSED_DATA_FILE = "./data/processed/water_quality_combined.csv"
+RAW_DATA_DIR = "../data/raw"
+PROCESSED_DATA_FILE = "../data/processed/water_quality_combined.csv"
 
 def extract_month_from_filename(filename):
     """
@@ -65,7 +65,7 @@ def extract_and_combine():
             df["Month"] = month
             
             # Append to the combined dataset
-            combined_data = pd.concat([combined_data, df], ignore_index=True)
+            combined_data = pd.concat([combined_data.reset_index(drop=True), df.reset_index(drop=True)], ignore_index=True)
 
     # Save the combined dataset
     os.makedirs(os.path.dirname(PROCESSED_DATA_FILE), exist_ok=True)
