@@ -32,48 +32,6 @@ WBPA-QA is a comprehensive tool designed to assess water quality in Bengaluru's 
 ├── frontend/                  # Vite + React.js for web application
 ├── backend/                   # Express.js for backend API
 └── README.md                  # Project documentation
-Here’s a `README.md` file template for your project, including an overview, setup instructions, and usage details:
-
----
-
-### **README.md**
-
-```markdown
-# WBPA-QA: Water Body Properties Analyzer for Quality Assessment
-
-WBPA-QA is a comprehensive tool designed to assess water quality in Bengaluru's lakes. It leverages historical data, machine learning, and user-friendly web and mobile interfaces to predict water quality and provide actionable recommendations for health and environmental improvements.
-
-## Features
-
-- **Data Extraction**: Extracts structured data from `.docx` files for each month.
-- **Preprocessing**: Cleans and normalizes data for analysis.
-- **Model Training**: Trains a machine learning model to predict key water quality parameters.
-- **Deployment**: Deploys the trained model using Flask for API integration.
-- **User Applications**:
-  - **Authorities**: Insights into water quality trends for policy-making.
-  - **General Public**: Access predictions and health recommendations via web and mobile apps.
-
----
-
-## Folder Structure
-
-```plaintext
-.
-├── data/
-│   ├── raw/                   # Raw data files (.docx)
-│   ├── processed/             # Processed CSV files
-│   ├── preprocessed/          # Preprocessed CSV files
-│   ├── pickle/                # Pickle files for each month
-├── models/                    # Trained models and scalers
-├── scripts/                   # Scripts for each pipeline stage
-│   ├── extract_data.py        # Extracts data from .docx files
-│   ├── preprocess.py          # Preprocesses data
-│   ├── train_model.py         # Trains the machine learning model
-│   ├── eval_model.py          # Evaluates the model
-│   ├── deploy_model.py        # Deploys the model with Flask
-├── frontend/                  # Vite + React.js for web application
-├── backend/                   # Express.js for backend API
-└── README.md                  # Project documentation
 ```
 
 ## Setup Instructions
