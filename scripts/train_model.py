@@ -1,53 +1,69 @@
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
 import joblib
 
-PROCESSED_DATA_DIR = "./data/processed/"
-MODEL_DIR = "./models/"
-TARGET_COLUMN = "WaterQualityClass"  # Replace with your target column
+PICKLE_DIR = "../data/pickle/"  # Directory containing the pickle files
+MODEL_FILE = "../models/water_quality_model.pkl"  # File to save the trained model
 
-def combine_datasets():
+TARGET_COLUMNS = ["Total Dissolved Solids", "pH", "Use Based Class"]  # Adjust based on your dataset
+
+def combine_pickle_data():
+    """
+    Combine all pickle files into a single DataFrame.
+    """
     combined_data = pd.DataFrame()
-    for file in os.listdir(PROCESSED_DATA_DIR):
-        if file.endswith(".csv"):
-            df = pd.read_csv(os.path.join(PROCESSED_DATA_DIR, file))
+
+    for file in os.listdir(PICKLE_DIR):
+        if file.endswith(".pkl"):
+            file_path = os.path.join(PICKLE_DIR, file)
+            df = pd.read_pickle(file_path)
             combined_data = pd.concat([combined_data, df], ignore_index=True)
+
     return combined_data
 
+def preprocess_data(df):
+    """
+    Preprocess the data by encoding categorical columns and ensuring numeric types.
+    """
+    # Encode categorical columns (e.g., 'Month', 'Use Based Class')
+    if "Month" in df.columns:
+        df["Month"] = df["Month"].astype("category").cat.codes
+    if "Use Based Class" in df.columns:
+        df["Use Based Class"] = df["Use Based Class"].astype("category").cat.codes
+
+    # Ensure all other columns are numeric
+    df = df.apply(pd.to_numeric, errors="coerce").fillna(0)
+    return df
+
 def train_model():
-    os.makedirs(MODEL_DIR, exist_ok=True)
+    # Combine all data from pickle files
+    df = combine_pickle_data()
 
-    # Combine datasets
-    data = combine_datasets()
+    # Preprocess data
+    df = preprocess_data(df)
 
-    # Preprocess
-    scaler = MinMaxScaler()
-    X = data.drop(columns=[TARGET_COLUMN])
-    X = scaler.fit_transform(X)
-    y = data[TARGET_COLUMN]
+    # Define features (X) and targets (y)
+    X = df.drop(columns=TARGET_COLUMNS)
+    y = df[TARGET_COLUMNS]
 
-    # Save scaler
-    joblib.dump(scaler, os.path.join(MODEL_DIR, "scaler.pkl"))
-
-    # Split data
+    # Split into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Train model
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    # Train the model
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
-    # Evaluate model
+    # Evaluate the model
     y_pred = model.predict(X_test)
-    print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}")
-    print("Classification Report:\n", classification_report(y_test, y_pred))
+    mse = mean_squared_error(y_test, y_pred, multioutput="raw_values")
+    print(f"Model Mean Squared Errors: {mse}")
 
-    # Save model
-    joblib.dump(model, os.path.join(MODEL_DIR, "water_quality_model.pkl"))
-    print("Model saved to models/water_quality_model.pkl")
+    # Save the model
+    joblib.dump(model, MODEL_FILE)
+    print(f"Model saved to {MODEL_FILE}")
 
 if __name__ == "__main__":
     train_model()

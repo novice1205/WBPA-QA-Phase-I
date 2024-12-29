@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 MODEL_DIR = "./models/"
 PROCESSED_DATA_DIR = "./data/processed/"
-TARGET_COLUMN = "WaterQualityClass"  # Replace with your target column
+TARGET_COLUMN = "Use Based Class"  # Replace with your target column
 
 def evaluate_model():
     # Load model and scaler

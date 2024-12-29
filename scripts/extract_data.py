@@ -1,77 +1,71 @@
 import os
 import pandas as pd
-import pdfplumber
+from docx import Document
 
-# Define directories
-RAW_DATA_DIR = "../data/raw"
-PROCESSED_DATA_FILE = "../data/processed/water_quality_combined.csv"
+RAW_DATA_DIR = "../data/raw/"
+PROCESSED_DATA_DIR = "../data/processed/"
 
-def extract_month_from_filename(filename):
+def ensure_unique_columns(columns):
     """
-    Extracts the month from the file name.
-    Assumes the file name starts with the month name (e.g., "January.pdf").
+    Ensures column names are unique by appending a counter to duplicates.
     """
-    return filename.split('.')[0]  # Take the part before the file extension
+    seen = {}
+    unique_columns = []
+    for col in columns:
+        if col in seen:
+            seen[col] += 1
+            unique_columns.append(f"{col}_{seen[col]}")
+        else:
+            seen[col] = 0
+            unique_columns.append(col)
+    return unique_columns
 
-def extract_table_from_pdf(pdf_path):
+def extract_table_from_docx(docx_path, month):
     """
-    Extracts tabular data from a PDF file using pdfplumber.
+    Extracts tabular data from a Word document and adds the 'Month' column.
     """
-    extracted_data = []
-    with pdfplumber.open(pdf_path) as pdf:
-        for page in pdf.pages:
-            table = page.extract_table()
-            if table:
-                extracted_data.extend(table)
-    # Convert to a DataFrame and set the first row as the header
-    if extracted_data:
-        df = pd.DataFrame(extracted_data[1:], columns=extracted_data[0])
+    document = Document(docx_path)
+    data = []
+
+    for table in document.tables:
+        for row in table.rows:
+            data.append([cell.text.strip() for cell in row.cells])
+
+    if len(data) > 1:  # Ensure there's at least one header row and some data
+        df = pd.DataFrame(data[1:], columns=data[0])  # First row as header
+
+        # Ensure unique column names
+        df.columns = ensure_unique_columns(df.columns)
+
+        # Add the "Month" column
+        df["Month"] = month
         return df
     else:
-        print(f"No table found in {pdf_path}")
-        return pd.DataFrame()  # Return an empty DataFrame if no table is found
+        print(f"No valid data found in file: {docx_path}")
+        return pd.DataFrame()  # Return an empty DataFrame if no valid table
 
-def extract_and_combine():
+def process_and_save_individual_csv():
     """
-    Combines data from multiple monthly PDF and CSV files into a single dataset.
+    Processes each Word document and saves its data to a separate CSV file.
     """
-    combined_data = pd.DataFrame()
+    os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
 
     for file in os.listdir(RAW_DATA_DIR):
-        if file.endswith(".pdf"):
-            # Extract the month from the file name
-            month = extract_month_from_filename(file)
-            
-            # Extract table data from the PDF
-            pdf_path = os.path.join(RAW_DATA_DIR, file)
-            df = extract_table_from_pdf(pdf_path)
-            
+        if file.endswith(".docx"):
+            month = file.split(".")[0]  # Extract month from filename
+            docx_path = os.path.join(RAW_DATA_DIR, file)
+            print(f"Processing file: {file}")
+
+            # Extract data
+            df = extract_table_from_docx(docx_path, month)
+
             if not df.empty:
-                # Add a "Month" column to the DataFrame
-                df["Month"] = month
-                
-                # Append to the combined dataset
-                combined_data = pd.concat([combined_data, df], ignore_index=True)
+                # Save to a separate CSV file
+                output_csv_path = os.path.join(PROCESSED_DATA_DIR, f"{month}.csv")
+                df.to_csv(output_csv_path, index=False)
+                print(f"Data for {file} saved to {output_csv_path}")
+            else:
+                print(f"Skipping empty file: {file}")
 
-        elif file.endswith(".csv"):
-            # Load the CSV file
-            csv_path = os.path.join(RAW_DATA_DIR, file)
-            df = pd.read_csv(csv_path)
-            
-            # Extract the month from the file name
-            month = extract_month_from_filename(file)
-            
-            # Add a "Month" column to the DataFrame
-            df["Month"] = month
-            
-            # Append to the combined dataset
-            combined_data = pd.concat([combined_data.reset_index(drop=True), df.reset_index(drop=True)], ignore_index=True)
-
-    # Save the combined dataset
-    os.makedirs(os.path.dirname(PROCESSED_DATA_FILE), exist_ok=True)
-    combined_data.to_csv(PROCESSED_DATA_FILE, index=False)
-    print(f"Data combined and saved to {PROCESSED_DATA_FILE}")
-
-# Run the script
 if __name__ == "__main__":
-    extract_and_combine()
+    process_and_save_individual_csv()
