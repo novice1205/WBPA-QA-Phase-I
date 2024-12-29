@@ -147,22 +147,15 @@ Contributions are welcome! Please follow these steps:
 5. Open a pull request.
 
 
-## License
-
-This project is licensed under the MIT License.
-
-
 ## Acknowledgments
 
 - [Scikit-learn](https://scikit-learn.org/)
 - [React.js](https://reactjs.org/)
 - [Flask](https://flask.palletsprojects.com/)
 - [Express.js](https://expressjs.com/)
-```
 
----
 
-### **How to Use**
+### How to Use
 1. Save this code as `README.md` in the root directory of your project.
 2. Push it to GitHub:
    ```bash
