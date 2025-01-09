@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home, User, BarChart2, Mail, LogOut, Menu, X, DropletsIcon as WaterDrop } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import {toast, Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import "../styles/Utils.css";
 
@@ -12,13 +12,14 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const handleSignOut = (e) => {
     e.preventDefault();
-    const toastId = toast.loading('Logging out...',{position: "bottom-right"});
-    toast.success('Logout successful!', { position: "bottom-right", id: toastId });
-    // Redirect to the dashboard after a short delay
+    const toastId = toast.loading('Logging out...', {position:"bottom-right"});
+
+    // Update the toast with a success message
+    toast.success('Logout successful!', { id: toastId, position: "bottom-right" });
     setTimeout(() => {
       navigate('/login');
-    }, 2000);
-  }
+    }, 1200);
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,78 +41,73 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 font-poppins">
-      {/* Navbar */}
-      <nav className="bg-[#2c5282] text-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <WaterDrop className="h-8 w-8 mr-2" />
-              <span className="text-xl font-semibold">Water Body Property Analyzer</span>
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <NavItem icon={<Home className="w-5 h-5" />} label="Home" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
-                <NavItem icon={<User className="w-5 h-5" />} label="User Info" active={activeTab === 'user'} onClick={() => setActiveTab('user')} />
-                <NavItem icon={<BarChart2 className="w-5 h-5" />} label="Analytics" active={activeTab === 'analytics'} onClick={() => setActiveTab('analytics')} />
-                <NavItem icon={<Mail className="w-5 h-5" />} label="Contact Us" active={activeTab === 'contact'} onClick={() => setActiveTab('contact')} />
-              </div>
-            </div>
-            <div className="hidden md:block">
-              <button onClick={handleSignOut} className="flex items-center text-white hover:text-blue-200 transition-colors duration-200">
-                <LogOut className="w-5 h-5 mr-2" />
-                <span>Logout</span>
-              </button>
-            </div>
-            <div className="md:hidden">
-              <button onClick={toggleMenu} className="text-white hover:text-blue-200 focus:outline-none">
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+    <div className="flex h-screen bg-gray-50 font-poppins">
+      {/* Sidebar */}
+      <aside className={`bg-gradient-to-b from-blue-800 to-blue-900 text-white w-64 min-h-screen p-4 flex flex-col transition-all duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center">
+            <WaterDrop className="h-8 w-8 mr-2" />
+            <span className="text-xl font-bold">WBPA-QA</span>
           </div>
+          <button onClick={toggleMenu} className="md:hidden">
+            <X className="h-6 w-6" />
+          </button>
         </div>
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <NavItem icon={<Home className="w-5 h-5" />} label="Home" active={activeTab === 'home'} onClick={() => { setActiveTab('home'); toggleMenu(); }} />
-              <NavItem icon={<User className="w-5 h-5" />} label="User Info" active={activeTab === 'user'} onClick={() => { setActiveTab('user'); toggleMenu(); }} />
-              <NavItem icon={<BarChart2 className="w-5 h-5" />} label="Analytics" active={activeTab === 'analytics'} onClick={() => { setActiveTab('analytics'); toggleMenu(); }} />
-              <NavItem icon={<Mail className="w-5 h-5" />} label="Contact Us" active={activeTab === 'contact'} onClick={() => { setActiveTab('contact'); toggleMenu(); }} />
-              <button onClick={handleSignOut} className="flex items-center w-full text-left px-3 py-2 text-white hover:bg-blue-700 transition-colors duration-200">
-                <LogOut className="w-5 h-5 mr-2" />
-                <span>Logout</span>
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
+        <nav className="flex-1 mb-auto">
+          <NavItem icon={<Home className="w-5 h-5" />} label="Home" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
+          <NavItem icon={<User className="w-5 h-5" />} label="User Info" active={activeTab === 'user'} onClick={() => setActiveTab('user')} />
+          <NavItem icon={<BarChart2 className="w-5 h-5" />} label="Analytics" active={activeTab === 'analytics'} onClick={() => setActiveTab('analytics')} />
+          <NavItem icon={<Mail className="w-5 h-5" />} label="Contact Us" active={activeTab === 'contact'} onClick={() => setActiveTab('contact')} />
+        </nav>
+        <button onClick={handleSignOut} className="flex items-center w-full px-4 py-2 text-white bg-red-400 hover:bg-red-500 rounded transition-colors duration-200">
+          <LogOut className="w-5 h-5 mr-2" />
+          <span>Logout</span>
+        </button>
+      </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
-        <div className="container mx-auto px-6 py-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
-          {renderContent()}
-        </div>
-      </main>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600 md:hidden"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+            <h2 className="text-2xl font-semibold text-gray-800">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
+          </div>
+        </header>
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {renderContent()}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
 
 const NavItem = ({ icon, label, active, onClick }) => (
   <button
-    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-      active ? 'bg-blue-700 text-white' : 'text-blue-100 hover:bg-blue-600 hover:text-white'
-    } transition-colors duration-200`}
+    className={`flex items-center w-full px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
+      active ? 'bg-blue-700 text-white' : 'text-blue-100 hover:bg-blue-700 hover:text-white'
+    }`}
     onClick={onClick}
   >
     {icon}
-    <span className="ml-2">{label}</span>
+    <span className="ml-3">{label}</span>
   </button>
 );
 
+const ChartCard = ({ title, children }) => (
+  <div className="bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg">
+    <h3 className="text-lg font-semibold mb-4 text-gray-800">{title}</h3>
+    {children}
+  </div>
+);
+
 const HomeContent = () => {
-  // Placeholder data for water quality (you can replace this with dynamic data later)
   const waterQualityData = [
     { name: 'Week 1', quality: 85 },
     { name: 'Week 2', quality: 88 },
@@ -119,92 +115,152 @@ const HomeContent = () => {
     { name: 'Week 4', quality: 89 },
   ];
 
-  // Placeholder data for water composition (you can replace this with dynamic data later)
-  const waterCompositionData = [
-    { name: 'Oxygen', value: 60 },
-    { name: 'Hydrogen', value: 30 },
-    { name: 'Minerals', value: 7 },
-    { name: 'Other', value: 3 },
+  const generatePieData = () => [
+    { name: 'Excellent', value: Math.floor(Math.random() * 40) + 30 },
+    { name: 'Good', value: Math.floor(Math.random() * 30) + 20 },
+    { name: 'Fair', value: Math.floor(Math.random() * 20) + 10 },
+    { name: 'Poor', value: Math.floor(Math.random() * 10) + 5 },
   ];
+
+  const previousMonthData = generatePieData();
+  const currentMonthData = generatePieData();
+  const nextMonthPrediction = generatePieData();
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
     <div className="space-y-6">
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Welcome to Water Quality Dashboard</h3>
-        <p className="text-gray-600 mb-4">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">Welcome to WBPA-QA Dashboard</h3>
+        <p className="text-gray-600">
           Here you can check water quality predictions, view your information, and access analytics.
         </p>
       </div>
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Water Quality This Month</h3>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={waterQualityData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="quality" fill="#4299E1" />
-            </BarChart>
-          </ResponsiveContainer>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
+          <ChartCard title="Water Quality This Month">
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={waterQualityData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="quality" fill="#1e40af" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </ChartCard>
         </div>
+
+        <ChartCard title="Current Month Water Quality">
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={currentMonthData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                  {currentMonthData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </ChartCard>
       </div>
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Water Composition</h3>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={waterCompositionData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {waterCompositionData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+      <div className="grid md:grid-cols-2 gap-6">
+        <ChartCard title="Previous Month Water Quality">
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={previousMonthData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                  {previousMonthData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </ChartCard>
+
+        <ChartCard title="Next Month Water Quality Prediction">
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={nextMonthPrediction}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                  {nextMonthPrediction.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </ChartCard>
+      </div>
+    </div>
+  );
+};
+
+const UserContent = () => {
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <h3 className="text-lg font-semibold mb-4 text-gray-800">User Information</h3>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <p className="mt-1 text-sm text-gray-900">Parth Raheja</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <p className="mt-1 text-sm text-gray-900">parthraheja1205@gmail.com</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Address</label>
+          <p className="mt-1 text-sm text-gray-900">PESU Boys Hostel, BSK 3rd Stage, Bangalore, Karnataka - 560085</p>
         </div>
       </div>
     </div>
   );
 };
 
-const UserContent = () => (
-  <div className="bg-white shadow rounded-lg p-6">
-    <h3 className="text-lg font-semibold mb-4">User Information</h3>
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <p className="mt-1 text-sm text-gray-900">John Doe</p>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
-        <p className="mt-1 text-sm text-gray-900">johndoe@example.com</p>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Address</label>
-        <p className="mt-1 text-sm text-gray-900">123 Water St, Cityville, State, 12345</p>
-      </div>
-    </div>
-  </div>
-);
-
 const AnalyticsContent = () => (
-  <div className="bg-white shadow rounded-lg p-6">
-    <h3 className="text-lg font-semibold mb-4">Water Quality Analytics</h3>
+  <div className="bg-white rounded-lg shadow-md p-6">
+    <h3 className="text-lg font-semibold mb-4 text-gray-800">Water Quality Analytics</h3>
     <p className="text-gray-600 mb-4">
       Use our prediction model to check water quality in your area.
     </p>
@@ -217,7 +273,7 @@ const AnalyticsContent = () => (
         <label htmlFor="lake" className="block text-sm font-medium text-gray-700">Nearby Lake</label>
         <input type="text" id="lake" name="lake" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter nearby lake" />
       </div>
-      <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200">
+      <button className="w-full bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900 transition-colors duration-200">
         Check Water Quality
       </button>
     </div>
@@ -225,8 +281,8 @@ const AnalyticsContent = () => (
 );
 
 const ContactContent = () => (
-  <div className="bg-white shadow rounded-lg p-6">
-    <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+  <div className="bg-white rounded-lg shadow-md p-6">
+    <h3 className="text-lg font-semibold mb-4 text-gray-800">Contact Us</h3>
     <form className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
@@ -240,7 +296,7 @@ const ContactContent = () => (
         <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
         <textarea id="message" name="message" rows="4" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
       </div>
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200">
+      <button type="submit" className="w-full bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900 transition-colors duration-200">
         Send Message
       </button>
     </form>
@@ -248,3 +304,4 @@ const ContactContent = () => (
 );
 
 export default Dashboard;
+

@@ -29,7 +29,7 @@ const Login = () => {
       // Redirect to the dashboard after a short delay
       setTimeout(() => {
         navigate('/dashboard');
-      }, 2000);
+      }, 1200);
 
     } catch (error) {
       console.error(error);
@@ -41,7 +41,7 @@ const Login = () => {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    navigate('/register');
+    navigate('/');
   };
 
   const handleForgetPassword = (e) => {

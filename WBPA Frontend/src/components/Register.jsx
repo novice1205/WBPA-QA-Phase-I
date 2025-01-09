@@ -15,7 +15,7 @@ const Register = () => {
     e.preventDefault();
 
     // Show a processing toast
-    const toastId = toast.loading('Processing registration...');
+    const toastId = toast.loading('Processing registration...',{position: 'bottom-right'});
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/signup', {
