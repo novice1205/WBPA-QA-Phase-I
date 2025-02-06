@@ -27,21 +27,21 @@ const ForgetPassword = () => {
       };
 
     return (
-        <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-40 mx-9 poppins" style={{ backgroundColor: 'inherit' }}>
+        <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-40 mx-9 font-poppins" style={{ backgroundColor: 'inherit' }}>
       {/* Left section */}
       <div className="w-full md:w-1/2 space-y-4 mb-8 md:mb-0">
-        <h1 className="text-3xl md:text-5xl font-bold" style={{ color: '#2B6CB0' }}>Forgot Your Password?</h1>
-        <p style={{ color: '#4299E1', fontSize:"18px" }}>
+        <h1 className="text-3xl md:text-5xl font-bold text-blue-600">Forgot Your Password?</h1>
+        <p className="text-blue-800">
           Don't worry! It happens. Please enter your email address to reset your password.
         </p>
       </div>
 
       {/* Right section - Forgot Password Form */}
       <div className="w-full md:w-1/2 max-w-md bg-white p-8 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2B6CB0' }}>Reset Password</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-blue-600">Reset Password</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Email Address</label>
+            <label htmlFor="email" className="block text-sm font-medium text-blue-600">Email Address</label>
             <input
               id="email"
               type="email"
@@ -54,13 +54,12 @@ const ForgetPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full p-2 rounded-md text-white"
-            style={{ backgroundColor: '#3182CE', hover: { backgroundColor: '#2C5282' } }}
+            className="w-full p-2 rounded-md text-white bg-blue-600 hover:bg-blue-800"
           >
             Send Reset Link
           </button>
         </form>
-        <p className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <p className="mt-4 text-sm text-blue-600">
           Remembered your password? <a href="/login" onClick={handleSignIn} className="font-medium hover:underline">Log in</a>
         </p>
       </div>

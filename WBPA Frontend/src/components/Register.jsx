@@ -45,22 +45,22 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-20 mx-9 poppins" style={{ backgroundColor: 'inherit', borderRadius: '10px' }}>
+    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-20 mx-9 font-poppins" style={{ backgroundColor: 'inherit', borderRadius: '10px' }}>
       <Toaster /> {/* Add Toaster component */}
       {/* Left section */}
       <div className="w-full md:w-1/2 space-y-4 mb-8 md:mb-0">
-        <h1 className="text-3xl md:text-5xl font-bold" style={{ color: '#2B6CB0' }}>Be a part of the solution to ensure cleaner and healthier water for all.</h1>
-        <p style={{ color: '#4299E1', fontSize: "18px" }}>
+        <h1 className="text-3xl md:text-5xl font-bold text-blue-600">Be a part of the solution to ensure cleaner and healthier water for all.</h1>
+        <p className="text-blue-800">
         Sign up to access insights, predictions, and health tips tailored for your location.
         </p>
       </div>
 
       {/* Right section */}
       <div className="w-full md:w-1/2 max-w-md bg-white p-8 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2B6CB0' }}>Sign Up</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-blue-600">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Full Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-blue-600">Full Name</label>
             <input
               id="name"
               type="text"
@@ -71,7 +71,7 @@ const Register = () => {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-blue-600">Email</label>
             <input
               id="email"
               type="email"
@@ -82,7 +82,7 @@ const Register = () => {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-blue-600">Password</label>
             <input
               id="password"
               type="password"
@@ -94,16 +94,15 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full p-2 rounded-md text-white"
-            style={{ backgroundColor: '#3182CE', hover: { backgroundColor: '#2C5282' } }}
+            className="w-full p-2 rounded-md text-white bg-blue-600 hover:bg-blue-800"
           >
             Register
           </button>
         </form>
-        <p className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <p className="mt-4 text-sm text-blue-600">
           Literally you probably haven't heard of them.
         </p>
-        <p className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <p className="mt-4 text-sm text-blue-600">
           Already have an account? <a href="/login" onClick={handleSignIn} className="font-medium hover:underline">Sign in</a>
         </p>
       </div>

@@ -41,7 +41,7 @@ const Login = () => {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    navigate('/');
+    navigate('/register');
   };
 
   const handleForgetPassword = (e) => {
@@ -50,22 +50,22 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-20 mx-9 poppins" style={{ backgroundColor: 'inherit' }}>
+    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-20 mx-9 font-poppins" style={{ backgroundColor: 'inherit' }}>
       <Toaster /> {/* Add Toaster component */}
       {/* Left section */}
       <div className="w-full md:w-1/2 space-y-4 mb-8 md:mb-0">
-        <h1 className="text-3xl md:text-5xl font-bold" style={{ color: '#2B6CB0' }}>Welcome Back</h1>
-        <p style={{ color: '#4299E1', fontSize: "18px" }}>
+        <h1 className="text-blue-600 text-3xl md:text-5xl font-bold">Welcome Back</h1>
+        <p className="text-blue-800">
           Log in to access your account and continue your journey with us.
         </p>
       </div>
 
       {/* Right section - Login Form */}
       <div className="w-full md:w-1/2 max-w-md bg-white p-8 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2B6CB0' }}>Login</h2>
+        <h2 className="text-2xl font-semibold text-blue-600 mb-6">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-blue-600">Email</label>
             <input
               id="email"
               type="email"
@@ -77,7 +77,7 @@ const Login = () => {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-blue-600">Password</label>
             <input
               id="password"
               type="password"
@@ -91,16 +91,15 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full p-2 rounded-md text-white"
-            style={{ backgroundColor: '#3182CE', hover: { backgroundColor: '#2C5282' } }}
+            className="w-full p-2 rounded-md text-white bg-blue-600 hover:bg-blue-800"
           >
             Log In
           </button>
         </form>
-        <div className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <div className="mt-4 text-sm text-blue-600">
           <a href="/forget-password" onClick={handleForgetPassword} className="hover:underline">Forgot password?</a>
         </div>
-        <p className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <p className="mt-4 text-sm text-blue-600">
           Don't have an account? <a href="/register" onClick={handleSignUp} className="font-medium hover:underline">Sign up</a>
         </p>
       </div>

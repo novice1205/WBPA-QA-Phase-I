@@ -26,11 +26,11 @@ const VerifyEmail = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-40 mx-9 poppins" style={{ backgroundColor: 'inherit', borderRadius:'10px' }}>
+    <div className="flex flex-col md:flex-row justify-between items-center p-5 md:p-14 my-40 mx-9 font-poppins" style={{ backgroundColor: 'inherit', borderRadius:'10px' }}>
       {/* Left section */}
       <div className="w-full md:w-1/2 space-y-4 mb-8 md:mb-0">
-        <h1 className="text-3xl md:text-5xl font-bold" style={{ color: '#2B6CB0' }}>Register Now to be a part of the team</h1>
-        <p style={{ color: '#4299E1', fontSize:"18px" }}>
+        <h1 className="text-3xl md:text-5xl font-bold text-blue-600">Register Now to be a part of the team</h1>
+        <p className="text-blue-800">
           An Organization that you can trust on.
         </p>
       </div>
@@ -38,10 +38,10 @@ const VerifyEmail = () => {
       {/* Right section - Verify OTP */}
       <div className="w-full md:w-1/2 max-w-md bg-white p-8 shadow-lg rounded-lg">
         <div className="verify-email-container">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: '#2B6CB0' }}>Verify Your Email</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-blue-600">Verify Your Email</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="code" className="block text-sm font-medium" style={{ color: '#4299E1' }}>Enter 6-digit OTP</label>
+              <label htmlFor="code" className="block text-sm font-medium text-blue-600">Enter 6-digit OTP</label>
               <input
                 id="otp"
                 type="text"
@@ -55,14 +55,13 @@ const VerifyEmail = () => {
             </div>
             <button
               type="submit"
-              className="w-full p-2 rounded-md text-white"
-              style={{ backgroundColor: '#3182CE', hover: { backgroundColor: '#2C5282' } }}
+              className="w-full p-2 rounded-md text-white bg-blue-600 hover:bg-blue-800"
             >
               Verify
             </button>
           </form>
         </div>
-        <p className="mt-4 text-sm" style={{ color: '#4299E1' }}>
+        <p className="mt-4 text-sm text-blue-600">
           Literally you probably haven't heard of them.
         </p>
       </div>

@@ -3,3 +3,12 @@
 .font-poppins{
     font-family: 'Poppins';
 }
+
+/* Reset base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
