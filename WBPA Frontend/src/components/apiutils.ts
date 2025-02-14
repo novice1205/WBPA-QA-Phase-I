@@ -1,4 +1,4 @@
-// const YOUR_API_KEY = "your_api_key";
+const YOUR_API_KEY = "your_api_key";
 
 export const fetchHealthPredictions = async (waterQualityData) => {
     const prompt = `Based on the following water quality parameters, predict potential health risks in 3-4 concise bullet points:\n\n${JSON.stringify(waterQualityData, null, 2)}`;
@@ -7,7 +7,7 @@ export const fetchHealthPredictions = async (waterQualityData) => {
       "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct",
       {
         headers: { 
-        //   Authorization: `Bearer ${YOUR_API_KEY}`,
+          Authorization: `Bearer ${YOUR_API_KEY}`,
           "Content-Type": "application/json"
         },
         method: "POST",
