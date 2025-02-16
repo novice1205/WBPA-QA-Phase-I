@@ -1,9 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Download } from "lucide-react"
 import jsPDF from "jspdf"
+import { fetchHealthPredictions } from "./apiutils"
+
+const mockLocations = ["Koramangala", "Indiranagar", "Whitefield", "Jayanagar", "JP Nagar"]
+const mockLakes = {
+  Koramangala: ["Bellandur Lake", "Madiwala Lake"],
+  Indiranagar: ["Ulsoor Lake", "Sankey Tank"],
+  Whitefield: ["Varthur Lake", "Kundalahalli Lake"],
+  Jayanagar: ["Lalbagh Lake", "Yediyur Lake"],
+  "JP Nagar": ["Puttenahalli Lake", "Sarakki Lake"],
+}
 
 const HealthReports = () => {
   const [formData, setFormData] = useState({
@@ -11,49 +21,35 @@ const HealthReports = () => {
     nearbyWaterBody: "",
     waterQualityCategory: "",
   })
-  const [report, setReport] = useState(null)
+  const [report, setReport] = useState({ diseases: [] })
+  
+  useEffect(() => {
+    if (formData.location) {
+      setFormData((prev) => ({ ...prev, nearbyWaterBody: mockLakes[formData.location]?.[0] || "" }))
+    }
+  }, [formData.location])
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const generateReport = (e) => {
+  const generateReport = async (e) => {
     e.preventDefault()
-    // In a real application, this data would be sent to a backend for processing
-    // Here, we'll simulate a report generation
-    const diseases = [
-      {
-        name: "Cholera",
-        description:
-          "An acute diarrheal infection caused by ingestion of food or water contaminated with the bacterium Vibrio cholerae.",
-      },
-      {
-        name: "Typhoid Fever",
-        description:
-          "A bacterial infection that can spread throughout the body, affecting many organs. It is caused by Salmonella typhi.",
-      },
-      {
-        name: "Giardiasis",
-        description:
-          "A diarrheal disease caused by the microscopic parasite Giardia. It is found on surfaces or in soil, food, or water that has been contaminated with feces from infected humans or animals.",
-      },
-      {
-        name: "Hepatitis A",
-        description:
-          "A highly contagious liver infection caused by the hepatitis A virus. It can be spread through contaminated food or water.",
-      },
-    ]
-
-    setReport({
-      location: formData.location,
-      nearbyWaterBody: formData.nearbyWaterBody,
-      waterQualityCategory: formData.waterQualityCategory,
-      diseases: diseases,
-    })
+    try {
+      const diseases = await fetchHealthPredictions(formData)
+      setReport({
+        location: formData.location,
+        nearbyWaterBody: formData.nearbyWaterBody,
+        waterQualityCategory: formData.waterQualityCategory,
+        diseases,
+      })
+    } catch (error) {
+      console.error("Error generating report:", error)
+    }
   }
 
   const downloadReport = () => {
-    if (!report) return
+    if (!report || !report.diseases.length) return
 
     const pdf = new jsPDF()
     let yPosition = 20
@@ -75,12 +71,9 @@ const HealthReports = () => {
     yPosition += 10
 
     pdf.setFontSize(12)
-    report.diseases.forEach((disease) => {
-      pdf.text(`${disease.name}:`, 20, yPosition)
+    report.diseases.forEach((disease, index) => {
+      pdf.text(`${index + 1}. ${disease}`, 20, yPosition)
       yPosition += 7
-      const descriptionLines = pdf.splitTextToSize(disease.description, 170)
-      pdf.text(descriptionLines, 25, yPosition)
-      yPosition += 7 * descriptionLines.length + 5
     })
 
     pdf.save("water_quality_health_report.pdf")
@@ -96,29 +89,36 @@ const HealthReports = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="location">
                 Location
               </label>
-              <input
+              <select
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="location"
-                type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select a location</option>
+                {mockLocations.map((loc) => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nearbyWaterBody">
                 Nearby Lake/Reservoir
               </label>
-              <input
+              <select
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="nearbyWaterBody"
-                type="text"
                 name="nearbyWaterBody"
                 value={formData.nearbyWaterBody}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                {mockLakes[formData.location]?.map((lake) => (
+                  <option key={lake} value={lake}>{lake}</option>
+                ))}
+              </select>
             </div>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="waterQualityCategory">
@@ -140,46 +140,27 @@ const HealthReports = () => {
                 <option value="Very Poor">Very Poor</option>
               </select>
             </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Generate Report
-              </button>
-            </div>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+              Generate Report
+            </button>
           </form>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          {report && (
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-              <h2 className="text-2xl font-bold mb-4">Generated Report</h2>
-              <p>
-                <strong>Location:</strong> {report.location}
-              </p>
-              <p>
-                <strong>Nearby Water Body:</strong> {report.nearbyWaterBody}
-              </p>
-              <p>
-                <strong>Water Quality Category:</strong> {report.waterQualityCategory}
-              </p>
-              <h3 className="text-xl font-bold mt-4 mb-2">Potential Water-borne Diseases:</h3>
-              <ul className="list-disc pl-5">
-                {report.diseases.map((disease, index) => (
-                  <li key={index} className="mb-2">
-                    <strong>{disease.name}:</strong> {disease.description}
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={downloadReport}
-                className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center"
-              >
-                <Download className="mr-2" size={20} />
-                Download Report
-              </button>
-            </div>
-          )}
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h2 className="text-2xl font-bold mb-4">Generated Report</h2>
+            <p><strong>Location:</strong> {report.location}</p>
+            <p><strong>Nearby Water Body:</strong> {report.nearbyWaterBody}</p>
+            <p><strong>Water Quality Category:</strong> {report.waterQualityCategory}</p>
+            <h3 className="text-xl font-bold mt-4 mb-2">Potential Water-borne Diseases:</h3>
+            <ul className="list-disc pl-5">
+              {report.diseases.map((disease, index) => (
+                <li key={index}>{disease}</li>
+              ))}
+            </ul>
+            <button onClick={downloadReport} className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center">
+            Download Report<Download className="mr-2 mx-4" size={20} />
+            </button>
+          </div>
         </motion.div>
       </div>
     </div>

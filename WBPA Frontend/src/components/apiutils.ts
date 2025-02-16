@@ -1,18 +1,18 @@
-const YOUR_API_KEY = "your_api_key";
+const YOUR_API_KEY = "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";
 
 export const fetchHealthPredictions = async (waterQualityData) => {
     const prompt = `Based on the following water quality parameters, predict potential health risks in 3-4 concise bullet points:\n\n${JSON.stringify(waterQualityData, null, 2)}`;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct",
-      {
-        headers: { 
-          Authorization: `Bearer ${YOUR_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify({ inputs: prompt }),
-      }
+        "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct",
+        {
+            headers: {
+                Authorization: `Bearer ${YOUR_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({ inputs: prompt }),
+        }
     );
 
     if (!response.ok) {
@@ -33,12 +33,12 @@ export const fetchHealthPredictions = async (waterQualityData) => {
 
         // 🔵 **Extract Only Predictions**
         const predictionList = predictions
-          .replace(/Based on the following water quality parameters.*?\n/, '') // Remove prompt
-          .replace(/Possible health risks:.*?\n/, '') // Remove generic message
-          .split(/\n|-/) // Split by new lines or dashes (for bullet points)
-          .map(sentence => sentence.trim()) // Trim spaces
-          .filter(sentence => sentence.length > 5) // Remove short irrelevant sentences
-          .slice(0, 3); // Limit to 3 predictions
+            .replace(/Based on the following water quality parameters.*?\n/, '') // Remove prompt
+            .replace(/Possible health risks:.*?\n/, '') // Remove generic message
+            .split(/\n|-/) // Split by new lines or dashes (for bullet points)
+            .map(sentence => sentence.trim()) // Trim spaces
+            .filter(sentence => sentence.length > 5) // Remove short irrelevant sentences
+            .slice(0, 3); // Limit to 3 predictions
 
         return predictionList;
     } else {
@@ -46,3 +46,25 @@ export const fetchHealthPredictions = async (waterQualityData) => {
     }
 };
 
+export const generateReport = async (formData) => {
+    try {
+        const healthPredictions = await fetchHealthPredictions({
+            location: formData.location,
+            nearbyWaterBody: formData.nearbyWaterBody,
+            waterQualityCategory: formData.waterQualityCategory,
+        });
+
+        return {
+            location: formData.location,
+            nearbyWaterBody: formData.nearbyWaterBody,
+            waterQualityCategory: formData.waterQualityCategory,
+            diseases: healthPredictions.map((prediction) => ({
+                name: prediction.split(":")[0] || "Unknown Disease",
+                description: prediction.split(":")[1] || "No description available.",
+            })),
+        };
+    } catch (error) {
+        console.error("Error generating report:", error);
+        return null;
+    }
+};
