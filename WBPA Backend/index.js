@@ -11,7 +11,7 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-  origin: ['http://localhost:5173','https://wbpa-qa-by-parth.vercel.app/'], // Allow only your React app to make requests
+  origin: ['http://localhost:5173','https://wbpa-qa-by-parth.vercel.app'], // Allow only your React app to make requests
   credentials: true, // Allow cookies to be sent across origins if needed
   optionsSuccessStatus: 200 // Handle legacy browsers
 };
