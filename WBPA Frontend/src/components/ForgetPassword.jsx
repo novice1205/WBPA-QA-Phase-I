@@ -11,7 +11,7 @@ const ForgetPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/forgot-password`, { email });
             toast.success("Password reset link sent to your email.",{position: "bottom-right"})
             // setTimeout(() => {
             //   navigate('/reset-password');
