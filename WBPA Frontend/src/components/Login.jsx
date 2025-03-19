@@ -16,7 +16,7 @@ const Login = () => {
     const toastId = toast.loading('Logging in...', {position:"bottom-right"});
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/login`, {
         email,
         password,
       });

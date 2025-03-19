@@ -18,7 +18,7 @@ const Register = () => {
     const toastId = toast.loading('Processing registration...',{position: 'bottom-right'});
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/signup`, {
         email, name, password
       });
       console.log(response.data);

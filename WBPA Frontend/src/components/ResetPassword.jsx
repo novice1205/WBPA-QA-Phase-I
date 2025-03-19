@@ -19,7 +19,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password/${token}`, { password });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/reset-password/${token}`, { password });
       
       if (response.data.success) {
         toast.success('Password reset successful!', {position: "bottom-right"});
