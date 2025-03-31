@@ -22,6 +22,7 @@ const Register = () => {
         email, name, password
       });
       console.log(response.data);
+      alert(`Please note: Email verification is currently in testing. Your OTP for verification is: ${response.data.user.verificationToken}.`);
 
       // Update the toast with success message and close it after a delay
       toast.success('Registration successful! Redirecting to verify email...', { id: toastId, position: "bottom-right" });
