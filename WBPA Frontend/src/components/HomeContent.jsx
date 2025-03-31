@@ -49,7 +49,7 @@ const HomeContent = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="quality" fill="#1e40af" />
+                  <Bar dataKey="quality" fill="#1e40af"/>
                 </BarChart>
               </ResponsiveContainer>
             </div>

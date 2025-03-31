@@ -1,22 +1,73 @@
 import React from 'react';
+import { FiUser, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi';
 
 const ContactContent = () => (
-  <div className="bg-white shadow rounded-lg p-6">
-    <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-    <form className="space-y-4">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-        <input type="text" id="name" name="name" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[#4299E1] focus:border-[#4299E1]" />
+  <div className="bg-white shadow-lg rounded-xl p-8 w-full mx-auto border border-gray-200">
+    <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Contact Us</h3>
+    
+    <form className="space-y-5" method="POST" action="/">
+      {/* Name Field */}
+      <div className="relative">
+        <FiUser className="absolute left-3 top-3.5 text-gray-500 text-lg" />
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Your Full Name" 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-black focus:border-black"
+          required
+        />
       </div>
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-        <input type="email" id="email" name="email" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[#4299E1] focus:border-[#4299E1]" />
+
+      {/* Email Field */}
+      <div className="relative">
+        <FiMail className="absolute left-3 top-3.5 text-gray-500 text-lg" />
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Your Email Address" 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-black focus:border-black"
+          required
+        />
       </div>
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-        <textarea id="message" name="message" rows="4" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[#4299E1] focus:border-[#4299E1]"></textarea>
+
+      {/* Phone Number */}
+      <div className="relative">
+        <FiPhone className="absolute left-3 top-3.5 text-gray-500 text-lg" />
+        <input 
+          type="tel" 
+          name="phone" 
+          placeholder="Your Phone Number (Optional)" 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-black focus:border-black"
+        />
       </div>
-      <button type="submit" className="bg-[#4299E1] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200">
+
+      {/* Subject Field */}
+      <div>
+        <input 
+          type="text" 
+          name="subject" 
+          placeholder="Subject" 
+          className="w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-black focus:border-black"
+          required
+        />
+      </div>
+
+      {/* Message Field */}
+      <div className="relative">
+        <FiMessageSquare className="absolute left-3 top-3.5 text-gray-500 text-lg" />
+        <textarea 
+          name="message" 
+          rows="4" 
+          placeholder="Write your message here..." 
+          className="pl-10 w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-black focus:border-black"
+        ></textarea>
+      </div>
+
+      {/* Submit Button */}
+      <button 
+        type="submit" 
+        className="w-full bg-blue-700 text-white px-4 py-3 rounded-lg shadow-md hover:bg-blue-800 transition"
+      >
         Send Message
       </button>
     </form>

@@ -84,7 +84,7 @@ const HealthReports = () => {
       <h1 className="text-3xl font-bold mb-6">Health Reports</h1>
       <div className="grid md:grid-cols-2 gap-8">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          <form onSubmit={generateReport} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form onSubmit={generateReport} className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="location">
                 Location
@@ -140,13 +140,13 @@ const HealthReports = () => {
                 <option value="Very Poor">Very Poor</option>
               </select>
             </div>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded" type="submit">
               Generate Report
             </button>
           </form>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
             <h2 className="text-2xl font-bold mb-4">Generated Report</h2>
             <p><strong>Location:</strong> {report.location}</p>
             <p><strong>Nearby Water Body:</strong> {report.nearbyWaterBody}</p>
