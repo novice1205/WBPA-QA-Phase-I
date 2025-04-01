@@ -3,7 +3,7 @@ import { FiUser, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi';
 
 const ContactContent = () => (
   <div className="bg-white shadow-lg rounded-xl p-8 w-full mx-auto border border-gray-200">
-    <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Contact Us</h3>
+    <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">Get In Touch</h3>
     
     <form className="space-y-5" method="POST" action="/">
       {/* Name Field */}
