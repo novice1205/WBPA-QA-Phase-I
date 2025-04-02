@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, logout, signup, verifyEmail, forgotPassword, resetPassword, checkAuth } from '../controllers/auth.controllers.js';
+import { login, logout, signup, verifyEmail, forgotPassword, resetPassword, contactResponse ,checkAuth } from '../controllers/auth.controllers.js';
 import { verifyToken } from '../middlewares/verifyToken.middlewares.js';
 
 const router = express.Router();
@@ -13,6 +13,7 @@ router.post('/forgot-password',forgotPassword);
 
 router.post('/reset-password/:token',resetPassword);
 
+router.post('/sendfeedback',contactResponse);
 router.get('/profile',verifyToken, checkAuth);
 
 export default router;

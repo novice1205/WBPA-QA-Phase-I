@@ -1,5 +1,5 @@
 import User from '../models/user.models.js';
-import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from '../mailtrap/emails.js';
+import { sendVerificationEmail, sendWelcomeEmail, sendContactFormEmail, sendPasswordResetEmail, sendResetSuccessEmail } from '../mailtrap/emails.js';
 import crypto from 'crypto';
 
 export const signup = async(req,res)=>{
@@ -165,5 +165,21 @@ export const checkAuth = async(req,res)=>{
         res.json(req.user);
     } catch (error) {
         console.error('Error ',error.message);
+    }
+}
+
+export const contactResponse = async(req,res) => {
+    try{
+        const {name, email, phone, subject, message} = req.body;
+        if (!name || !email || !subject){
+            return res.status(400).json({message: 'All fields are mandatory'});
+        }
+        // send email to admin with contact form details
+        const adminEmail = "parthraheja1205@gmail.com";
+        await sendContactFormEmail(adminEmail, name, email, phone, subject, message);
+        res.status(200).json({name: name, email: email, phone:phone, subject: subject, message: message});
+        console.log("Form Submitted");
+    }catch (error){
+        console.log('Error ',error.message);
     }
 }

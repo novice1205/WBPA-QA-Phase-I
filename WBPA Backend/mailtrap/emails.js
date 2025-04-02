@@ -72,3 +72,20 @@ export const sendResetSuccessEmail = async(email) =>{
         console.error('Error ',error.message);
     }
 }
+
+export const sendContactFormEmail = async(email, name, userEmail, phone, subject, message) =>{
+    const recipient = [{email}];
+    try{
+        const response = await mailtrapClient.send({
+            from: sender,
+            to: recipient,
+            subject: 'Contact Form Submission',
+            html: `Here are the Details: ${name} ${userEmail} ${phone} ${subject} ${message}`,
+            category: 'Contact Form'
+        });
+
+        console.log(response);
+    }catch (error) {
+        console.error('Error ',error.message);
+    }
+}
