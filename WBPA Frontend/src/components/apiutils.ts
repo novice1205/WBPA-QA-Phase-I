@@ -1,10 +1,10 @@
-const YOUR_API_KEY = "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";
+const YOUR_API_KEY = "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";
 
 export const fetchHealthPredictions = async (waterQualityData) => {
     const prompt = `Based on the following water quality parameters, predict potential health risks in 3-4 concise bullet points:\n\n${JSON.stringify(waterQualityData, null, 2)}`;
 
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct",
+        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3",
         {
             headers: {
                 Authorization: `Bearer ${YOUR_API_KEY}`,
