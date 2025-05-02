@@ -1,4 +1,4 @@
-const YOUR_API_KEY = "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";
+const YOUR_API_KEY = "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";
 
 export const fetchHealthPredictions = async (waterQualityData) => {
     const prompt = `Based on the following water quality parameters, predict potential health risks in 3-4 concise bullet points:\n\n${JSON.stringify(waterQualityData, null, 2)}`;
