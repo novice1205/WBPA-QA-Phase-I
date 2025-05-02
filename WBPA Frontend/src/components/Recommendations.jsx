@@ -1,5 +1,8 @@
+"use client"
 import { motion } from "framer-motion"
 import { CheckCircle } from "lucide-react"
+import { useEffect, useState } from "react"
+import { ResponsiveContainer, Tooltip, Cell, Legend, PieChart, Pie } from "recharts"
 
 const Recommendations = () => {
   const recommendations = [
@@ -55,9 +58,52 @@ const Recommendations = () => {
     },
   ]
 
+  // 🔥 Heatmap data (mock)
+  const [heatmapData, setHeatmapData] = useState([
+    { district: "Koramangala", severity: 80 },
+    { district: "Whitefield", severity: 45 },
+    { district: "Indiranagar", severity: 65 },
+    { district: "JP Nagar", severity: 30 },
+    { district: "Jayanagar", severity: 50 },
+  ])
+
+  const getColor = (value) => {
+    if (value > 70) return "#dc2626" // red
+    if (value > 50) return "#f97316" // orange
+    if (value > 30) return "#facc15" // yellow
+    return "#22c55e" // green
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Recommendations for Improving Water Quality</h1>
+
+      {/* 🧠 Heatmap visualization */}
+      <div className="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 className="text-xl font-semibold mb-4">District-Level Water Quality Risk Heatmap</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={heatmapData}
+              dataKey="severity"
+              nameKey="district"
+              outerRadius={100}
+              label
+            >
+              {heatmapData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={getColor(entry.severity)} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+        <p className="text-sm text-gray-500 mt-2">
+          Risk is color-coded from green (low risk) to red (high contamination risk).
+        </p>
+      </div>
+
+      {/* ✅ Recommendations cards */}
       <div className="grid md:grid-cols-2 gap-6">
         {recommendations.map((recommendation, index) => (
           <motion.div
@@ -82,4 +128,3 @@ const Recommendations = () => {
 }
 
 export default Recommendations
-
